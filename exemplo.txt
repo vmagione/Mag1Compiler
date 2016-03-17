@@ -1,0 +1,10 @@
+inicio PseudoAlgoritmoExemplo
+	#ola
+	int i =0; #bosta
+	for(i=0;i<10;i++){
+		i = i+x;
+		cout<< i;"""bosta"""
+	} 
+	"""bosta
+	"""
+fim
