@@ -1,6 +1,6 @@
 <?php
 	
-	include("funcs.php");
+	
 	include("classes.php");
 	
 	/*
@@ -35,10 +35,7 @@
 	$codeS = array();
 	//$codeS = str_split($_POST['codeS']);
 	
-	$alfabeto = array('a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
-		'r', 's', 't', 'u', 'v', 'x', 'y', 'z', '=', '+=' , '-=' , '*=' , '@=' , '/=' , '%=' , '&=' , '|=', 
-		'>', '<', '>=', '<=', '<>', '+', '-', '*', '**', '/', '%', '?', '<<=' , '>>=' , '**=' , '//=',
-		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
+	
 		
 	
 ?>(
@@ -209,16 +206,38 @@
 									<?php 
 									//String do código é $codigo, onde cada foreach é uma linha
 										//$codigo é um array
-										$noLines = verificaComentario($codigo);
-										$tempTag = new Tag();
+										//$noLines = verificaComentario($codigo);
+										//$tempTag = new Tag();
 										
-										$lexer = new lexer($noLines);
-										//echo "Tag: ". $tempTag->getTRUE();;
+										$lexer = new lexer($codigo);
+										$tokens = array();
+										$tokens = $lexer->getTokens();
+										
+										
 									?>
 									
 									
 									
 								</div>	
+								<div class="row control-group col-lg-6"  align="left">
+									<label for="nome">Reserved Words:</label>
+									<br>
+									
+									<?php 
+									//String do código é $codigo, onde cada foreach é uma linha
+										//$codigo é um array
+										//$noLines = verificaComentario($codigo);
+										//$tempTag = new Tag();
+										
+										$lexer->getWords();
+										
+										
+									?>
+									
+									
+									
+								</div>	
+								
 								
 								<br><br>
 								<div  class="form-group col-xs-12"align="center">
