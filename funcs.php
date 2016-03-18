@@ -9,6 +9,7 @@
 		foreach($codigo as $cS){
 			//trim the ASCII control characters at the beginning of $binary 
 			//(from 0 to 31 inclusive)
+			$clean = $cS;
 			$clean = ltrim($cS, "\x00..\x1F"); //String limpa de espaços
 			$cleanAux = ''; //String Auxiliar
 			$cleanArray = str_split($clean); //Array da String Limpa
