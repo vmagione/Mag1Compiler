@@ -19,7 +19,7 @@
 		'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 
 		'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y','Z',
 		'=', '>', '<', '+', '-', '*', '/', '%', '?', ':', ';',',','(', ')','&',
-		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',' ', '\n','\t', '\r', '\0', '\x0B',' ',' ');
+		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', "\""," ", "\n","\t", "\r", "\0", "\x0B"," "," ");
 		public $letras = array(
 		'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
 		'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
@@ -28,7 +28,7 @@
 		public $numeros = array(
 		'0', '1', '2', '3', '4', '5', '6', '7', '8', '9');
 		public $delimitadores = array(
-		' ', '=', '>', '<', '+', '-', '.','*', '/', '%', '?', ':', ';',',','(', ')','&','\t','\n','\r','\0','\x0B',' ',' ',' ');
+		' ', '=', '>', '<', '+', '-', '.','*', '/', '%', '?', ':', ';',',','(', ')','&',"\t","\n","\r","\0","\x0B"," "," "," ");
 		
 		public 
 		//Aritmeticos
@@ -500,47 +500,45 @@
 									case ':':
 										$this->tokens[] = ($this->words[':']);
 										break;	
-									case ';':
+									case ";":
 										$this->tokens[] = ($this->words[';']);
 										break;	
 											
-									case '(':
+									case "(":
 										$this->tokens[] = ($this->words['(']);
 										break;	
 										
-									case ')':
+									case ")":
 										$this->tokens[] = ($this->words[')']);
 										break;	
 											
-									case '[':
+									case "[":
 										$this->tokens[] = ($this->words['[']);
 										break;	
 										
-									case ']':
+									case "]":
 										$this->tokens[] = ($this->words[']']);
 										break;	
 											
-									case '{':
+									case "{":
 										$this->tokens[] = ($this->words['{']);
 										break;	
 										
-									case '}':
+									case "}":
 										$this->tokens[] = ($this->words['}']);
 										break;	
-									case ',':
+									case ",":
 										$this->tokens[] = ($this->words[',']);
 										break;	
 									
 									
-									case '"':
-										if(isset($char+1)){
-											$auxString =$char+1;
-										}
+									case "\"":
 										
+										$auxString =$char+1;
 										$contString=0;
-										$string ='';
+										$string ="\"";
 										while($auxString<$numC){
-											if($ccS[$auxString] == '"' ){
+											if($ccS[$auxString] == "\"" ){
 												
 												$string = $string.$ccS[$auxString];
 												$contString++;
@@ -587,7 +585,7 @@
 									$pulos =0;
 									$auxChar=$char;
 									$auxDelimitado=0; 
-									$palavra=''; //palavra que salva os caracteres do token
+									$palavra=""; //palavra que salva os caracteres do token
 									while($auxChar<$numC && $auxDelimitado ==0){
 										foreach($tag->delimitadores as $deli){
 											//Se for algum delimitador
@@ -642,7 +640,7 @@
 											//Se for algum delimitador
 											if($deli == $ccS[$auxChar]){
 												$auxDelimitado=1;
-												if($ccS[$auxChar] == '.'){
+												if($ccS[$auxChar] == "."){
 													$auxDelimitado=0;
 													$ptFlutuante = 1;
 													$palavra = $palavra.$ccS[$auxChar];
@@ -712,7 +710,7 @@
 						
 					//Se caractere não existe	
 					}else{
-						if($ccS[$char] != '' && ($ccS[$char]) != '\n' && ($ccS[$char]) != ' '&& ($ccS[$char]) != ' ' && ($ccS[$char]) != null){
+						if($ccS[$char] != "" && ($ccS[$char]) != "\n" && ($ccS[$char]) != ' '&& ($ccS[$char]) != ' ' && ($ccS[$char]) != null){
 							//echo 'Warning: Caractere inexistente. Linha '. $contLinhas . ' , posicao '.$char.' => ['.$ccS[$char].']<br>';
 							$erros[] =  'Warning: Caractere inexistente na linha '. $contLinhas . '=> ['.$ccS[$char].']';
 							
@@ -725,7 +723,7 @@
 					
 				echo '<br>';
 				$contLinhas++;	
-				$this->tokens[] = ($this->words['eol']);
+				$this->tokens[] = ($this->words["eol"]);
 			}
 			
 			
