@@ -37,11 +37,13 @@
 					//echo 'Encontrou um comentario';
 					break;
 				}
-				if($conq =='"""'){
+				$pulos=0;
+				if($conq =='"""'  && $comentario ==0){
 					$comentario =1;
 					//echo 'Encontrou um comentario';
 					//Caso o final do comentario seja na mesma linha
-					$j = $i;
+					$j = $i+3;
+					
 					while($j<$tamCA){
 						if($j<$tamCA-2){
 							$conq = $cleanArray[$j].$cleanArray[$j+1].$cleanArray[$j+2];
@@ -52,12 +54,16 @@
 							break;
 						}
 						$j++;
+						$pulos++;
 					}
+					
 					break;
+					
 				}
 				if($comentario==0){
 					$cleanAux = $cleanAux. $cleanArray[$i];
 				}
+				$i = $i+$pulos;
 				$i++;
 			}
 			$contCS++; //Cont de linhas	do codigo								
