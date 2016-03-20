@@ -140,7 +140,7 @@
 									<h3>Lexical Analyzer: </h3>
 									<hr class="star-primary">
 								</div>
-								<div class="row control-group col-lg-6"  align="left">
+								<div class="row control-group col-lg-4"  align="left">
 									
 									<label for="nome">Upload log:</label>
 									<br>
@@ -199,7 +199,7 @@
 
 									?>
 								</div>
-								<div class="row control-group col-lg-6"  align="left">
+								<div class="row control-group col-lg-4"  align="left">
 									<label for="nome">File:</label>
 									<br>
 									
@@ -211,7 +211,6 @@
 										
 										$lexer = new lexer($codigo);
 										$tokens = array();
-										$tokens = $lexer->getTokens();
 										
 										
 									?>
@@ -219,8 +218,8 @@
 									
 									
 								</div>	
-								<div class="row control-group col-lg-6"  align="left">
-									<label for="nome">Reserved Words:</label>
+								<div class="row control-group col-lg-4"  align="left">
+									<label for="nome">Tokens:</label>
 									<br>
 									
 									<?php 
@@ -229,7 +228,7 @@
 										//$noLines = verificaComentario($codigo);
 										//$tempTag = new Tag();
 										
-										$lexer->getWords();
+										$lexer->getTokens();
 										
 										
 									?>
