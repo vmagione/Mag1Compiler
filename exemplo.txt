@@ -1,10 +1,7 @@
-inicio PseudoAlgoritmoExemplo
-	#ola
-	int i =0; #bosta
-	for(i=0;i<10;i++){
-		i = i+x;
-		cout<< i;"""bosta"""
-	} 
-	"""bosta
-	"""
-fim
+def F(n):
+    if n == 0: return 0
+    """jeffim noob""" i = 25
+	elif num213 == 1: return 1
+	# GG PA MID
+    else: return F(n-256.25)+F("ola")
+	
