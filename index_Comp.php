@@ -140,6 +140,8 @@
 									<h3>Lexical Analyzer: </h3>
 									<hr class="star-primary">
 								</div>
+							<div  class="row control-group">
+								
 								<div class="row control-group col-lg-4"  align="left">
 									
 									<label for="nome">Upload log:</label>
@@ -181,12 +183,32 @@
 													 // Lê um arquivo em um array.  Nesse exemplo nós obteremos o código fonte de
 													 // uma URL via HTTP
 													 $codigo = file ($uploaddir . basename($_FILES['file']['name']));
-													
 													// Percorre o array, mostrando o fonte HTML com numeração de linhas.
-													/*
-													foreach ($codigo as $line_num => $line) {
-														echo "{$line_num}</b> : " . htmlspecialchars($line) . "<br>\n";
 													
+													/*
+													echo "<br><br> <label>Inside</label><br>";
+													
+													$contLine=0;
+													preg_replace('/\s\s+/' , 'indent', $codigo);
+													
+													foreach ($codigo as $line_num => $line) {
+														$contLine++;
+														preg_replace('/\s\s+/', 'indent', $line);
+														echo "{$line_num}</b> : " . $line . "<br>\n";
+													}
+													$i=0;
+													*/
+													
+													/*
+													preg_replace("{[ \t]+}", "indent", $codigo);
+														
+													while($i<$contLine){
+														preg_replace("{[ \t]}", "indent", $codigo[$i]);
+														if($codigo[$i] == "\t" || $codigo[$i].$codigo[$i+1] == "\t"){
+															echo "_";
+														}
+														echo "{$i}</b> : " . $codigo[$i] . "<br>\n";
+														$i++;
 													}
 													*/
 											  }
@@ -200,9 +222,9 @@
 									?>
 								</div>
 								<div class="row control-group col-lg-4"  align="left">
-									<label for="nome">File:</label>
+									<label for="nome">File Log:</label>
 									<br>
-									
+									<code>
 									<?php 
 									//String do código é $codigo, onde cada foreach é uma linha
 										//$codigo é um array
@@ -211,15 +233,33 @@
 										
 										$lexer = new lexer($codigo);
 										$tokens = array();
+											
 										
+									?>
+									</code>
+									
+									
+								</div>	
+								<div class="row control-group col-lg-4"  align="left">
+									<label for="nome">Tabs Log:</label>
+									<br>
+									<?php 
+										
+										$lexer->getTabs();
 										
 									?>
 									
 									
 									
 								</div>	
+								
+							</div>
+							<div  class="row control-group">
+							
+								<!--  New Row-->
+								
 								<div class="row control-group col-lg-4"  align="left">
-									<label for="nome">Tokens:</label>
+									<label >Tokens Log:</label>
 									<br>
 									
 									<?php 
@@ -228,8 +268,18 @@
 										//$noLines = verificaComentario($codigo);
 										//$tempTag = new Tag();
 										
-										$lexer->getTokens();
-										
+										// Abre ou cria o arquivo bloco1.txt
+										// "a" representa que o arquivo é aberto para ser escrito
+										$tokens = $lexer->getTokens();
+										$newTxt = fopen("downloads/tokens.txt", "a");
+										$stringTxt ='';
+										// Escreve $stringTxt no downloads/tokens.txt
+										foreach($tokens as $token){
+											$stringTxt = $stringTxt. $token->toString() . " ";
+										}
+										$escreve = fwrite($newTxt, $stringTxt);
+										// Fecha o arquivo
+										fclose($newTxt); 
 										
 										
 									?>
@@ -237,12 +287,15 @@
 									
 									
 								</div>	
+							</div>	
+								<!--  New Row-->
 								
+							<div  class="row control-group">
 								
-								<br><br>
 								<div  class="form-group col-xs-12"align="center">
 									<button class="botao" type="submit" name="submit">Back</button>
 								</div>
+							</div>	
 							</div>
 						</fieldset>
 					</form>  	
