@@ -155,6 +155,8 @@
 		public $words = array(); //Hashtable do tipo words(word.lexeme, word)
 		public $tokens = array();
 		public $tokensLinhas = array();
+		public $tabulacoes = array();
+		
 		public $erros = array(); //array de erros
 		
 		public function getWords(){
@@ -249,6 +251,7 @@
 			
 			
 			
+			
 		}
 		
 		public function ehLetra($c){
@@ -283,11 +286,15 @@
 			//echo '<br><br><label>Vetor: </label><br>';
 			//Salvar tokens
 			$contLinhas =0;
+			foreach($cod as $contL =>$c){
+				$contLinhas++;				
+			}
 			
-			foreach($cod as $c){ 
+			foreach($cod as $li =>$c){ 
+				$this->tabulacoes[$li] = "0";
 				//cod = codigo, c = linha
 				//$c = ltrim($c, ' ');
-				$c = ltrim($c, "\x00..\x1F");
+				//$c = ltrim($c, "\x00..\x1F");
 				
 				$stringC = str_split($c);
 				
@@ -302,6 +309,7 @@
 					$numC++;
 				}
 				$char=0;
+				$tabulacao =0;
 				while($char<$numC){	
 					
 					//$ccS[$char] = ltrim($ccS[$char], "\x00..\x1F"); //String limpa de espaços
@@ -314,7 +322,7 @@
 						if($alf == $ccS[$char]){
 							$caracterExistente = 1;
 						}
-						if('\n' == ord($ccS[$char]) || '0x0A' == ord($ccS[$char])){
+						if("\n" == $ccS[$char]){
 							$caracterExistente = 1;
 						}
 					}
@@ -325,8 +333,40 @@
 							
 							
 							if($char<$numC-1){
-							//Reconhecimento de tokens compostos de 2 caracteres
+							//Reconhecimento de tokens compostos de 2 (ou mais) caracteres
+								
+								
+								
+								//Reconhecimento de tabulaçao(indentação) atraves de \t
 								switch($ccS[$char]){
+									case "\t":
+										while($ccS[$char] == "\t"){
+											//echo $li. "INDENT";
+											//$this->tokens[] = ($this->words['indent']);
+											$char++;
+											$tabulacao++;
+											$this->tabulacoes[$li] = $tabulacao;
+											if($li >0){
+												if($this->tabulacoes[$li] > $this->tabulacoes[$li-1]){
+													//echo $li. "INDENT";
+													$this->tokens[] = ($this->words['indent']);
+												}
+												if($this->tabulacoes[$li] < $this->tabulacoes[$li-1]){
+													//echo $li. "DEDENT";
+													$this->tokens[] = ($this->words['dedent']);
+												}
+												
+											}
+										}
+										break;
+
+									case "/t":
+										//echo "DEDENT";
+										$this->tokens[] = ($this->words['dedent']);
+										$char++;
+										break;
+
+										
 									case '=':
 										if($ccS[$char+1] == '='){
 											$this->tokens[] = ($this->words['==']);
@@ -567,6 +607,33 @@
 										
 									
 								}
+								
+									//Reconhecimento de tabulaçao(indentação) atraves de \t
+								while($char < $numC-3){
+									$tabEspaços = $ccS[$char].$ccS[$char+1].$ccS[$char+2].$ccS[$char+3];
+							
+									if($tabEspaços != "    "){
+										break;
+									}
+									
+									$char = $char+4;
+									$tabulacao++;
+									$this->tabulacoes[$li] = $tabulacao;
+									if($li >0){
+										if($this->tabulacoes[$li] > $this->tabulacoes[$li-1]){
+											//echo $li. "INDENT";
+											$this->tokens[] = ($this->words['indent']);
+										}
+										if($this->tabulacoes[$li] < $this->tabulacoes[$li-1]){
+											//echo $li. "DEDENT";
+											$this->tokens[] = ($this->words['dedent']);
+										}
+										
+									}
+								
+							
+								}
+								
 								//Reconhece strings
 								
 								
@@ -574,13 +641,6 @@
 								
 								//Reconhecimento de tokens palavras
 								$ehLetra= $this->ehLetra($ccS[$char]);
-								/*
-								$antes ='';
-								if(isset($ccS[$char-1])){
-									$antes = $ccS[$char-1];
-								}
-								&& ($antes != '"')
-								*/
 								if($ehLetra ==1){
 									$pulos =0;
 									$auxChar=$char;
@@ -677,6 +737,8 @@
 									$word = new Word($tag->idT,$palavra);
 									$this->tokens[] = ($word);
 									*/
+								
+									
 									$char = $char + $pulos-1; 
 								}
 								
@@ -703,6 +765,7 @@
 									$word = new Num($ccS[$char]);
 									$this->tokens[] = ($word);
 								}
+								
 								//Ultimo caractere
 								//$this->tokens[] = $ccS[$char];
 								$char++;
@@ -721,9 +784,21 @@
 					
 				}
 					
-				echo '<br>';
-				$contLinhas++;	
+				
+				
 				$this->tokens[] = ($this->words["eol"]);
+				//Se ultima linha e ultimo caractere, salvar um end final (conferir se precisa)
+				//$this->tokens[] = ($this->words['dedent']);
+				if($li == $contLinhas-1){
+					if($this->tabulacoes[$li] > $this->tabulacoes[0]){
+						//echo $li. "DEDENT";
+						$this->tokens[] = ($this->words['dedent']);
+					}
+					if($this->tabulacoes[$li] == $this->tabulacoes[0] && $this->tabulacoes[$li] < $this->tabulacoes[$li-1]){
+						//echo $li. "DEDENT";
+						$this->tokens[] = ($this->words['dedent']);
+					}
+				}
 			}
 			
 			
@@ -747,7 +822,16 @@
 				}
 			return $this->tokens;
 		}
-		
+		public function getTabs(){
+			$contToken=0;
+			//Variavel auxiliar para imprimir de 10 em 10
+			$de10 =1;
+			foreach($this->tabulacoes as $c => $t){
+			 		
+			echo "{$t}  <br>";	
+			}
+			return $this->tabulacoes;
+		}
 	}
 	
 ?>
